@@ -34,12 +34,12 @@ module Rack
     end
 
     def call(env)
-      res = @db.country(env['REMOTE_ADDR'])
-      env['X_GEOIP_COUNTRY_ID'] = res[2]
-      env['X_GEOIP_COUNTRY_CODE'] = res[3]
-      env['X_GEOIP_COUNTRY_CODE3'] = res[4]
-      env['X_GEOIP_COUNTRY'] = res[5]
-      env['X_GEOIP_CONTINENT'] = res[6]
+      result = @db.country(env['REMOTE_ADDR']).to_hash
+      env['X_GEOIP_COUNTRY_ID'] = result[:country_code]
+      env['X_GEOIP_COUNTRY_CODE'] = result[:country_code2]
+      env['X_GEOIP_COUNTRY_CODE3'] = result[:country_code3]
+      env['X_GEOIP_COUNTRY'] = result[:country_name]
+      env['X_GEOIP_CONTINENT'] = result[:continent_code]
       @app.call(env)
     end
 
