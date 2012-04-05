@@ -34,7 +34,8 @@ module Rack
     end
 
     def call(env)
-      result = @db.country(env['REMOTE_ADDR']).to_hash
+      request = Rack::Request.new(env)
+      result = @db.country(request.ip).to_hash
       env['X_GEOIP_COUNTRY_ID'] = result[:country_code]
       env['X_GEOIP_COUNTRY_CODE'] = result[:country_code2]
       env['X_GEOIP_COUNTRY_CODE3'] = result[:country_code3]
